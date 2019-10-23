@@ -23,5 +23,8 @@ print(even)
 
 print('=' * 40)
 
-backStr = 'sdrawkcab si gnirts sihT'
+backStr = 'sdrawkcab saw gnirts sihT'
 print(backStr[::-1])
+
+myList = ['h', 'e', 'l', 'l', 'o']
+print('-'.join(myList))
