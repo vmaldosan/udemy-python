@@ -108,3 +108,9 @@ venv.bak/
 *.iws
 *.iml
 *.ipr
+
+# Shelve
+*.bak
+*.dat
+*.dir
+*.db
