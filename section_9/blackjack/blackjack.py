@@ -9,7 +9,7 @@ mainWindow = tkinter.Tk()
 
 
 def loadImages(cardImages):
-  suits = ['heart', 'club', 'diamond', 'space']
+  suits = ['heart', 'club', 'diamond', 'spade']
   faceCards = ['jack', 'queen', 'king']
 
   if tkinter.TkVersion >= 8.6:
@@ -22,18 +22,37 @@ def loadImages(cardImages):
     # first the number cards 1 to 10
     for card in range(1, 11):
       name = 'cards/{}_{}.{}'.format(str(card), suit, extension)
-      image = tkinter.PhotoImage(name=name)
+      image = tkinter.PhotoImage(file=name)
       cardImages.append((card, image,))
     
     # next the face cards
     for card in faceCards:
-      name = 'cards/{}_{}.{}'. format(str(card), suit, extension)
-      image = tkinter.PhotoImage(name=name)
+      name = 'cards/{}_{}.{}'.format(str(card), suit, extension)
+      image = tkinter.PhotoImage(file=name)
       cardImages.append((10, image,))
+
+
+def dealCard(frame):
+  # pop the next card off the top of the deck
+  nextCard = deck.pop()
+  # add the image to a Label and display the label
+  tkinter.Label(frame, image=nextCard[1], relief='raised').pack(side='left')
+  # return the card's face value
+  return nextCard
+
+
+def dealDealer():
+  dealCard(dealerCardFrame)
+
+
+def dealPlayer():
+  dealCard(playerCardFrame)
+
 
 # Set up the screen and frames for the dealer and player
 mainWindow.title('Black Jack')
 mainWindow.geometry('640x480')
+mainWindow.configure(background='green')
 
 resultText = tkinter.StringVar()
 result = tkinter.Label(mainWindow, textvariable=resultText)
@@ -59,14 +78,22 @@ playerCardFrame.grid(row=2, column=1, sticky='ew', rowspan=2)
 buttonFrame = tkinter.Frame(mainWindow)
 buttonFrame.grid(row=3, column=0, columnspan=3, sticky='w')
 
-dealerButton = tkinter.Button(buttonFrame, text='Dealer')
+dealerButton = tkinter.Button(buttonFrame, text='Dealer', command=dealDealer)
 dealerButton.grid(row=0, column=0)
 
-playerButton = tkinter.Button(buttonFrame, text='Player')
+playerButton = tkinter.Button(buttonFrame, text='Player', command=dealPlayer)
 playerButton.grid(row=0, column=1)
 
 # load cards
 cards = []
 loadImages(cards)
+
+# create a new deck of cards and shuffle them
+deck = list(cards)
+random.shuffle(deck)
+
+# create the list to store the dealer's and player's hands
+dealerHand = []
+playerHand = []
 
 mainWindow.mainloop()
