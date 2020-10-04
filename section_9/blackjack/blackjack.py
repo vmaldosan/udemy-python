@@ -5,8 +5,6 @@ try:
 except ImportError:
   import TkInter as tkinter
 
-mainWindow = tkinter.Tk()
-
 
 def loadImages(cardImages):
   suits = ['heart', 'club', 'diamond', 'spade']
@@ -34,20 +32,60 @@ def loadImages(cardImages):
 
 def dealCard(frame):
   # pop the next card off the top of the deck
-  nextCard = deck.pop()
+  nextCard = deck.pop(0)
   # add the image to a Label and display the label
   tkinter.Label(frame, image=nextCard[1], relief='raised').pack(side='left')
   # return the card's face value
   return nextCard
 
 
+def scoreHand(hand):
+  # calculate the total score of all cards in the hand
+  # only one ace can have the value 11, and this will be reduced to 1 if the hand would bust
+  score = 0
+  ace = False
+  for nextCard in hand:
+    cardValue = nextCard[0]
+    if cardValue == 1 and not ace:
+      ace = True
+      cardValue = 11
+    score += cardValue
+
+    # if we would bust, check if there is an ace and substract 10
+    if score > 21 and ace:
+      score -= 10
+      ace = False
+  return score
+
+
 def dealDealer():
-  dealCard(dealerCardFrame)
+  dealerScore = scoreHand(dealerHand)
+  while 0 < dealerScore < 17:
+    dealerHand.append(dealCard(dealerCardFrame))
+    dealerScore = scoreHand(dealerHand)
+    dealerScoreLabel.set(dealerScore)
+
+  playerScore = scoreHand(playerHand)
+  if playerScore > 21:
+    resultText.set('Dealer wins!')
+  elif dealerScore > 21 or dealerScore < playerScore:
+    resultText.set('Player wins!')
+  elif dealerScore > playerScore:
+    resultText.set('Dealer wins!')
+  else:
+    resultText.set('It''s a draw!')
 
 
 def dealPlayer():
-  dealCard(playerCardFrame)
+  playerHand.append(dealCard(playerCardFrame))
+  playerScore = scoreHand(playerHand)
 
+  playerScoreLabel.set(playerScore)
+  if playerScore > 21:
+    resultText.set('Dealer wins!')
+
+
+mainWindow = tkinter.Tk()
 
 # Set up the screen and frames for the dealer and player
 mainWindow.title('Black Jack')
@@ -69,6 +107,7 @@ dealerCardFrame = tkinter.Frame(cardFrame, background='green')
 dealerCardFrame.grid(row=0, column=1, sticky='ew', rowspan=2)
 
 playerScoreLabel = tkinter.IntVar()
+
 tkinter.Label(cardFrame, text='Player', background='green', fg='white').grid(row=2, column=0)
 tkinter.Label(cardFrame, textvariable=playerScoreLabel, background='green', fg='white').grid(row=3, column=0)
 # embedded frame to hold the card images
@@ -95,5 +134,10 @@ random.shuffle(deck)
 # create the list to store the dealer's and player's hands
 dealerHand = []
 playerHand = []
+
+dealPlayer()
+dealerHand.append(dealCard(dealerCardFrame))
+dealerScoreLabel.set(scoreHand(dealerHand))
+dealPlayer()
 
 mainWindow.mainloop()
