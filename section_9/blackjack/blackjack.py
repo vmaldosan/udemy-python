@@ -33,6 +33,8 @@ def loadImages(cardImages):
 def dealCard(frame):
   # pop the next card off the top of the deck
   nextCard = deck.pop(0)
+  # and add it to the back of the pack
+  deck.append(nextCard)
   # add the image to a Label and display the label
   tkinter.Label(frame, image=nextCard[1], relief='raised').pack(side='left')
   # return the card's face value
@@ -75,6 +77,9 @@ def dealDealer():
   else:
     resultText.set('It\'s a draw!')
 
+  dealerButton['state'] = 'disabled'
+  playerButton['state'] = 'disabled'
+
 
 def dealPlayer():
   playerHand.append(dealCard(playerCardFrame))
@@ -83,6 +88,8 @@ def dealPlayer():
   playerScoreLabel.set(playerScore)
   if playerScore > 21:
     resultText.set('Dealer wins!')
+    dealerButton['state'] = 'disabled'
+    playerButton['state'] = 'disabled'
 
 
 def newGame():
@@ -90,6 +97,7 @@ def newGame():
   global playerCardFrame
   global dealerHand
   global playerHand
+  global deck
 
   dealerCardFrame.destroy()
   dealerCardFrame = tkinter.Frame(cardFrame, background='green')
@@ -104,10 +112,14 @@ def newGame():
   dealerHand = []
   playerHand = []
 
+  random.shuffle(deck)
+
   dealPlayer()
   dealerHand.append(dealCard(dealerCardFrame))
   dealerScoreLabel.set(scoreHand(dealerHand))
   dealPlayer()
+  dealerButton['state'] = 'normal'
+  playerButton['state'] = 'normal'
 
 
 mainWindow = tkinter.Tk()
@@ -155,9 +167,8 @@ newGameButton.grid(row=0, column=2 )
 cards = []
 loadImages(cards)
 
-# create a new deck of cards and shuffle them
+# create a new deck of cards
 deck = list(cards)
-random.shuffle(deck)
 
 # create the list to store the dealer's and player's hands
 dealerHand = []
