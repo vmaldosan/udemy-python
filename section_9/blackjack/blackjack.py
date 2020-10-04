@@ -60,12 +60,12 @@ def scoreHand(hand):
 
 def dealDealer():
   dealerScore = scoreHand(dealerHand)
-  while 0 < dealerScore < 17:
+  playerScore = scoreHand(playerHand)
+  while dealerScore < playerScore and 0 < dealerScore < 21:
     dealerHand.append(dealCard(dealerCardFrame))
     dealerScore = scoreHand(dealerHand)
     dealerScoreLabel.set(dealerScore)
 
-  playerScore = scoreHand(playerHand)
   if playerScore > 21:
     resultText.set('Dealer wins!')
   elif dealerScore > 21 or dealerScore < playerScore:
@@ -73,7 +73,7 @@ def dealDealer():
   elif dealerScore > playerScore:
     resultText.set('Dealer wins!')
   else:
-    resultText.set('It''s a draw!')
+    resultText.set('It\'s a draw!')
 
 
 def dealPlayer():
@@ -83,6 +83,31 @@ def dealPlayer():
   playerScoreLabel.set(playerScore)
   if playerScore > 21:
     resultText.set('Dealer wins!')
+
+
+def newGame():
+  global dealerCardFrame
+  global playerCardFrame
+  global dealerHand
+  global playerHand
+
+  dealerCardFrame.destroy()
+  dealerCardFrame = tkinter.Frame(cardFrame, background='green')
+  dealerCardFrame.grid(row=0, column=1, sticky='ew', rowspan=2)
+  
+  playerCardFrame.destroy()
+  playerCardFrame = tkinter.Frame(cardFrame, background='green')
+  playerCardFrame.grid(row=2, column=1, sticky='ew', rowspan=2)
+
+  resultText.set('')
+
+  dealerHand = []
+  playerHand = []
+
+  dealPlayer()
+  dealerHand.append(dealCard(dealerCardFrame))
+  dealerScoreLabel.set(scoreHand(dealerHand))
+  dealPlayer()
 
 
 mainWindow = tkinter.Tk()
@@ -123,6 +148,9 @@ dealerButton.grid(row=0, column=0)
 playerButton = tkinter.Button(buttonFrame, text='Player', command=dealPlayer)
 playerButton.grid(row=0, column=1)
 
+newGameButton = tkinter.Button(buttonFrame, text='New game', command=newGame)
+newGameButton.grid(row=0, column=2 )
+
 # load cards
 cards = []
 loadImages(cards)
@@ -135,9 +163,6 @@ random.shuffle(deck)
 dealerHand = []
 playerHand = []
 
-dealPlayer()
-dealerHand.append(dealCard(dealerCardFrame))
-dealerScoreLabel.set(scoreHand(dealerHand))
-dealPlayer()
+newGame()
 
 mainWindow.mainloop()
