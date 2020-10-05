@@ -112,14 +112,20 @@ def newGame():
   dealerHand = []
   playerHand = []
 
-  random.shuffle(deck)
+  play()
 
+
+def play():
+  random.shuffle(deck)
   dealPlayer()
   dealerHand.append(dealCard(dealerCardFrame))
   dealerScoreLabel.set(scoreHand(dealerHand))
   dealPlayer()
   dealerButton['state'] = 'normal'
   playerButton['state'] = 'normal'
+
+
+  mainWindow.mainloop()
 
 
 mainWindow = tkinter.Tk()
@@ -174,6 +180,5 @@ deck = list(cards)
 dealerHand = []
 playerHand = []
 
-newGame()
-
-mainWindow.mainloop()
+if __name__ == '__main__':
+  play()
