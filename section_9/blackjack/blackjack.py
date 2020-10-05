@@ -30,7 +30,7 @@ def loadImages(cardImages):
       cardImages.append((10, image,))
 
 
-def dealCard(frame):
+def _dealCard(frame):
   # pop the next card off the top of the deck
   nextCard = deck.pop(0)
   # and add it to the back of the pack
@@ -64,7 +64,7 @@ def dealDealer():
   dealerScore = scoreHand(dealerHand)
   playerScore = scoreHand(playerHand)
   while dealerScore < playerScore and 0 < dealerScore < 21:
-    dealerHand.append(dealCard(dealerCardFrame))
+    dealerHand.append(_dealCard(dealerCardFrame))
     dealerScore = scoreHand(dealerHand)
     dealerScoreLabel.set(dealerScore)
 
@@ -82,7 +82,7 @@ def dealDealer():
 
 
 def dealPlayer():
-  playerHand.append(dealCard(playerCardFrame))
+  playerHand.append(_dealCard(playerCardFrame))
   playerScore = scoreHand(playerHand)
 
   playerScoreLabel.set(playerScore)
@@ -90,6 +90,17 @@ def dealPlayer():
     resultText.set('Dealer wins!')
     dealerButton['state'] = 'disabled'
     playerButton['state'] = 'disabled'
+
+
+def initialDeal():
+  random.shuffle(deck)
+  dealPlayer()
+  dealerHand.append(_dealCard(dealerCardFrame))
+  dealerScoreLabel.set(scoreHand(dealerHand))
+  dealPlayer()
+
+  dealerButton['state'] = 'normal'
+  playerButton['state'] = 'normal'
 
 
 def newGame():
@@ -111,20 +122,11 @@ def newGame():
 
   dealerHand = []
   playerHand = []
-
-  play()
+  initialDeal()
 
 
 def play():
-  random.shuffle(deck)
-  dealPlayer()
-  dealerHand.append(dealCard(dealerCardFrame))
-  dealerScoreLabel.set(scoreHand(dealerHand))
-  dealPlayer()
-  dealerButton['state'] = 'normal'
-  playerButton['state'] = 'normal'
-
-
+  initialDeal()
   mainWindow.mainloop()
 
 
