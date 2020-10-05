@@ -114,3 +114,6 @@ venv.bak/
 *.dat
 *.dir
 *.db
+
+# VSCode
+/.vscode/
