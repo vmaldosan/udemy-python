@@ -2,7 +2,7 @@ class Song:
   """ Class to represent a song
 
   Attributes:
-    title (str): The title of the song
+    name (str): The title of the song
     artist (Artist): An Artist object representing the creator of the song
     duration (int): The duration of the song in seconds. May be zero
   """
@@ -11,6 +11,12 @@ class Song:
     self.title = title
     self.artist = artist
     self.duration = duration
+
+  def getTitle(self):
+    return self.title
+
+  name = property(getTitle)
+
 
 class Album:
   """ Class to represent an Album, using its track list
@@ -40,16 +46,18 @@ class Album:
     """ Adds a song to the track list
 
     Args:
-      song (Song): A song to add
+      song (Song): The title of a song to add.
       position (Optional[int]): if specified, the song will be added to that position
-      in the track list - inserting it between other songs if necessary.
-      Otherwise, the song will be added to the end of the list
+        in the track list - inserting it between other songs if necessary.
+        Otherwise, the song will be added to the end of the list
     """
-
-    if position is None:
-      self.tracks.append(song)
-    else:
-      self.tracks.insert(position, song)
+    songFound = findObject(song, self.tracks)
+    if songFound is None:
+      songFound = Song(song, self.artist)
+      if position is None:
+        self.tracks.append(songFound)
+      else:
+        self.tracks.insert(position, songFound)
 
 
 class Artist:
@@ -62,6 +70,7 @@ class Artist:
     
   Methods:
     addAlbum: Use to add a new ablum to the artist's albums list
+    addSong:
   """
 
   def __init__(self, name):
@@ -77,6 +86,27 @@ class Artist:
     """
     self.albums.append(album)
 
+  def addSong(self, name, year, title):
+    """ Add new song to the collection of albums 
+    
+    This method will add the song to an album in the collection.
+    A new album will be created in the collection if it doesn't already exist.
+
+    Args:
+      name (str): The name of the album
+      year (int): The year the album was produec
+      title (str): The title of the song
+    """
+    albumFound = findObject(name, self.albums)
+    if albumFound is None:
+      print(name + ' not found')
+      albumFound = Album(name, year, self)
+      self.addAlbum(albumFound)
+    else:
+      print('Found album ' + name)
+    
+    albumFound.addSong(title)
+
 
 def findObject(field, objectList):
   """ Check 'objectList' to see if an object with a 'name' attribute equal to 'field' exists, return it if so """
@@ -87,8 +117,6 @@ def findObject(field, objectList):
 
 
 def loadData():
-  newArtist = None
-  newAlbum = None
   artistList = []
 
   with open('albums.txt', 'r') as albums:
@@ -98,35 +126,13 @@ def loadData():
       yearField = int(yearField)
       print('{}:{}:{}:{}'.format(artistField, albumField, yearField, songField))
 
+      newArtist = findObject(artistField, artistList)
       if newArtist is None:
         newArtist = Artist(artistField)
         artistList.append(newArtist)
-      elif newArtist.name != artistField:
-        # We've just read details for a new artist
-        # retrieve the artist object if there is one,
-        # otherwise create a new artist object and add it to the artist list.
-        newArtist = findObject(artistField, artistList)
-        if newArtist is None:
-          newArtist = Artist(artistField)
-          artistList.append(newArtist)
-        newAlbum = None
 
-      if newAlbum is None:
-        newAlbum = Album(albumField, yearField, newArtist)
-        newArtist.addAlbum(newAlbum)
-      elif newAlbum.name != albumField:
-        # We've just read a new album for the current artist
-        # Retrieve the album object if there is one
-        # otherwise create a new album object and store it in the artist collection
-        newAlbum = findObject(albumField, newArtist.albums)
-        if newAlbum is None:
-          newAlbum = Album(albumField, yearField, newArtist)
-          newArtist.addAlbum(newAlbum)
+      newArtist.addSong(albumField, yearField, songField)
 
-      # create a new song object and add it to the current album's collection
-      newSong = Song(songField, newArtist)
-      newAlbum.addSong(newSong)
-    
   return artistList
 
 
