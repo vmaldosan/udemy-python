@@ -15,3 +15,9 @@ print(victor)
 
 victor.lives -= 1
 print(victor)
+
+victor.level = 2
+print(victor)
+
+victor.level = 0
+print(victor)
