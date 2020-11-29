@@ -21,3 +21,6 @@ print(victor)
 
 victor.level = 0
 print(victor)
+
+victor.score = 500
+print(victor)
