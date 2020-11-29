@@ -2,25 +2,13 @@ from player import Player
 
 victor = Player('Victor')
 
-print(victor.name)
-print(victor.lives)
-victor.lives -= 1
-print(victor)
+from enemy import Troll
 
-victor.lives -= 1
-print(victor)
+uglyTroll = Troll()
+print('Ugly troll - {}'.format(uglyTroll))
 
-victor.lives -= 1
-print(victor)
+anotherTroll = Troll('Ug', 18, 1)
+print ('Another troll - {}'.format(anotherTroll))
 
-victor.lives -= 1
-print(victor)
-
-victor.level = 2
-print(victor)
-
-victor.level = 0
-print(victor)
-
-victor.score = 500
-print(victor)
+brother = Troll('Urg', 23)
+print(brother)
