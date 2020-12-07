@@ -2,7 +2,7 @@ import random
 
 class Enemy:
   
-  def __init__(self, name="Enemy", hitPoints=0, lives=1):
+  def __init__(self, name='Enemy', hitPoints=0, lives=1):
     self._name = name
     self._hitPoints = hitPoints
     self._originalHP = hitPoints
@@ -25,6 +25,7 @@ class Enemy:
       else:
         print('{0._name} is dead'.format(self))
         self._alive = False
+        self._hitPoints = 0
 
   def __str__(self):
     return 'Name: {0._name}, Lives: {0._lives}, Hit points: {0._hitPoints}'.format(self)
@@ -61,3 +62,14 @@ class Vampyre(Enemy):
   def takeDamage(self, damage):
     if not self.dodges():
       super().takeDamage(damage=damage)
+
+
+class VampyreKing(Vampyre):
+
+  def __init__(self, name):
+    super().__init__(name)
+    self._hitPoints = 140
+    self._originalHP = 140
+
+  def takeDamage(self, damage):
+    super().takeDamage(damage // 4)

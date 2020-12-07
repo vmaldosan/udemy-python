@@ -1,4 +1,4 @@
-from enemy import Troll, Vampyre
+from enemy import Troll, Vampyre, VampyreKing
 
 uglyTroll = Troll('Pug')
 print('Ugly troll - {}'.format(uglyTroll))
@@ -30,3 +30,9 @@ print(youngVampyre)
 while oldVampyre.alive:
   oldVampyre.takeDamage(1)
   print(oldVampyre)
+
+kingOfVampyres = VampyreKing('Vlad')
+print(kingOfVampyres)
+while kingOfVampyres.alive:
+  kingOfVampyres.takeDamage(100)
+  print(kingOfVampyres)
