@@ -26,3 +26,7 @@ print(youngVampyre)
 
 youngVampyre.takeDamage(25)
 print(youngVampyre)
+
+while oldVampyre.alive:
+  oldVampyre.takeDamage(1)
+  print(oldVampyre)
