@@ -47,10 +47,10 @@ class Body(Tag):
 
 class HtmlDoc(object):
 
-  def __init__(self, title=None):
-    self._docType = DocType()
-    self._head = Head(title)
-    self._body = Body()
+  def __init__(self, docType, head, body):
+    self._docType = docType
+    self._head = head
+    self._body = body
 
   def addTag(self, name, contents):
     self._body.addTag(name, contents)
@@ -64,9 +64,27 @@ class HtmlDoc(object):
 
 
 if __name__ == '__main__':
-  myPage = HtmlDoc('This is the page title')
-  myPage.addTag('h1', 'Main heading')
-  myPage.addTag('h2', 'Sub-heading')
-  myPage.addTag('p', 'This is a paragraph that will appear on the page')
-  with open('test.html', 'w') as testDoc:
+  # myPage = HtmlDoc('This is the page title')
+  # myPage.addTag('h1', 'Main heading')
+  # myPage.addTag('h2', 'Sub-heading')
+  # myPage.addTag('p', 'This is a paragraph that will appear on the page')
+  # with open('test.html', 'w') as testDoc:
+  #   myPage.display(file=testDoc)
+
+  newBody = Body()
+  newBody.addTag('h1', 'Aggregation')
+  newBody.addTag('p', "Unlike <strong>composition</strong>, aggregation uses existing instances"
+      " of objects to build up another object.")
+  newBody.addTag('p', "The composed object doesn't actually own the object that it's composed of"
+      " - if it's destroyed, those objects continue to exist.")
+  
+  newDocType = DocType()
+  newHeader = Head('Aggregation document')
+  myPage = HtmlDoc(newDocType, newHeader, newBody)
+  with open('test3.html', 'w') as testDoc:
     myPage.display(file=testDoc)
+
+# give our document new content by switching its body
+# myPage._body = newBody
+# with open('test2.html', 'w') as testDoc:
+#   myPage.display(file=testDoc)
