@@ -2,9 +2,13 @@ import sqlite3
 
 db = sqlite3.connect('contacts.sqlite')
 
-updateSql = "UPDATE contacts SET email = 'updated@email.com' WHERE contacts.phone = 1234"
+newEmail = 'updated@email.com'
+phone = input('Please enter the phone number: ')
+
+# updateSql = "UPDATE contacts SET email = 'updated@email.com' WHERE contacts.phone = 1234"
+updateSql = 'UPDATE contacts SET email = ? WHERE contacts.phone = ?'
 updateCursor = db.cursor()
-updateCursor.execute(updateSql)
+updateCursor.execute(updateSql, (newEmail, phone))
 print('{} rows updated'.format(updateCursor.rowcount))
 
 updateCursor.connection.commit()
