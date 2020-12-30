@@ -4,7 +4,7 @@ uglyTroll = Troll('Pug')
 print('Ugly troll - {}'.format(uglyTroll))
 
 anotherTroll = Troll('Ug')
-print ('Another troll - {}'.format(anotherTroll))
+print('Another troll - {}'.format(anotherTroll))
 
 brother = Troll('Urg')
 print(brother)

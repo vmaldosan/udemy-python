@@ -26,6 +26,7 @@ class Duck(object):
   def fly(self):
     self._wing.fly()
 
+
 class Penguin(object):
   
   def walk(self):
@@ -34,18 +35,23 @@ class Penguin(object):
   def swim(self):
     print('Come on it, but it\'s a bit chilly this far South')
 
-  def fly(self):
+  def quack(self):
     print('Are you \'avin\' a larf? I\'m a penguin!')
 
-# def testDuck(duck):
-#   duck.walk()
-#   duck.swim()
-#   duck.fly()
+
+class Flock(object):
+
+  def __init__(self):
+    self.flock = []
+
+  def addDuck(self, duck: Duck) -> None:
+    self.flock.append(duck)
+
+  def migrate(self):
+    for duck in self.flock:
+      duck.fly()
+
 
 if __name__ == '__main__':
   donald = Duck()
   donald.fly()
-
-  # hopper = Penguin()
-  # testDuck(hopper)
-  

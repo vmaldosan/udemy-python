@@ -38,6 +38,7 @@ class Enemy:
 
   alive = property(_isAlive, _setAlive)
 
+
 class Troll(Enemy):
 
   def __init__(self, name):
